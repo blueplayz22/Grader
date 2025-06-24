@@ -1,0 +1,177 @@
+
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>حاسبة الدرجات</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: #f0f4f8;
+      padding: 20px;
+      margin: 0;
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+    }
+    .subject {
+      margin-bottom: 15px;
+    }
+    label {
+      display: block;
+      margin-bottom: 5px;
+      font-weight: bold;
+    }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      box-sizing: border-box;
+      text-align: right;
+      font-size: 16px;
+    }
+    button {
+      padding: 12px;
+      font-size: 18px;
+      margin-top: 20px;
+      width: 100%;
+      background-color: #4CAF50;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    .result {
+      margin-top: 25px;
+      font-size: 18px;
+      text-align: center;
+      background: #fff;
+      padding: 15px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .fail {
+      color: red;
+      margin-top: 10px;
+    }
+
+    @media (max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>حاسبة الدرجات</h1>
+
+  <div class="subject">
+    <label>اللغة الإنجليزية (160):</label>
+    <input type="number" id="english" max="160" min="0">
+  </div>
+
+  <div class="subject">
+    <label>العلوم (200):</label>
+    <input type="number" id="science" max="200" min="0">
+  </div>
+
+  <div class="subject">
+    <label>التاريخ (80):</label>
+    <input type="number" id="history" max="80" min="0">
+  </div>
+
+  <div class="subject">
+    <label>الجغرافيا (80):</label>
+    <input type="number" id="geography" max="80" min="0">
+  </div>
+
+  <div class="subject">
+    <label>اللغة العربية (160):</label>
+    <input type="number" id="arabic" max="160" min="0">
+  </div>
+
+  <div class="subject">
+    <label>التربية الإسلامية (80):</label>
+    <input type="number" id="islamic" max="80" min="0">
+  </div>
+
+  <div class="subject">
+    <label>الحاسوب (80):</label>
+    <input type="number" id="computer" max="80" min="0">
+  </div>
+
+  <div class="subject">
+    <label>الكتابة (80):</label>
+    <input type="number" id="writing" max="80" min="0">
+  </div>
+
+  <div class="subject">
+    <label>الرياضيات (200):</label>
+    <input type="number" id="math" max="200" min="0">
+  </div>
+
+  <button onclick="calculate()">احسب النتيجة</button>
+
+  <div class="result" id="output"></div>
+
+  <script>
+    function calculate() {
+      const subjects = {
+        english: 160,
+        science: 200,
+        history: 80,
+        geography: 80,
+        arabic: 160,
+        islamic: 80,
+        computer: 80,
+        writing: 80,
+        math: 200
+      };
+
+      let total = 0;
+      let totalMax = 1120;
+      let failedSubjects = [];
+
+      for (let id in subjects) {
+        let input = document.getElementById(id);
+        let value = parseFloat(input.value) || 0;
+        if (value < (subjects[id] / 2)) {
+          let label = input.previousElementSibling.innerText.split('(')[0].trim();
+          failedSubjects.push(label);
+        }
+        total += value;
+      }
+
+      let percentage = (total / totalMax) * 100;
+      let grade = "";
+
+      if (percentage >= 85) {
+        grade = "ممتاز";
+      } else if (percentage >= 75) {
+        grade = "جيد جدًا";
+      } else if (percentage >= 65) {
+        grade = "جيد";
+      } else if (percentage >= 50) {
+        grade = "مقبول";
+      } else {
+        grade = "راسب";
+      }
+
+      let resultHTML = `
+        <p><strong>المجموع:</strong> ${total} / ${totalMax}</p>
+        <p><strong>النسبة المئوية:</strong> ${percentage.toFixed(2)}%</p>
+        <p><strong>التقدير:</strong> ${grade}</p>
+      `;
+
+      if (failedSubjects.length > 0) {
+        resultHTML += `<div class="fail"><strong>المواد التي لم تنجح فيها:</strong><br>${failedSubjects.join(", ")}</div>`;
+      }
+
+      document.getElementById("output").innerHTML = resultHTML;
+    }
+  </script>
+
+</body>
+</html>
